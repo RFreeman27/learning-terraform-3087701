@@ -51,8 +51,26 @@ module "blog_sg" {
 
   vpc_id = module.blog_vpc.vpc_id
 
-  ingress_rules       = ["http-80-tcp","https-443-tcp"]
-  ingress_cidr = ["0.0.0.0/0"]
-  egress_rules        = ["all-all"]
-  egress_cidr  = ["0.0.0.0/0"]
+  ingress_rules = {
+    http = {
+      from_port   = 80
+      to_port     = 80
+      ip_protocol = "tcp"
+      cidr_ipv4   = "0.0.0.0/0"
+      description = "HTTP from anywhere"
+    }
+    https = {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      cidr_ipv4   = "0.0.0.0/0"
+      description = "HTTPS from anywhere"
+    }
+  }
+  egress_rules        = {
+    all = {
+      ip_protocol = "-1"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
 }
